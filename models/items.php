@@ -54,9 +54,10 @@ class Item {
 	protected $label;
 	protected $tag;
 	protected $done;
+	protected $date; // YYYY-MM-DD
 	
 	
-	public function __construct($attributes) {
+	public function __construct($attributes = array()) {
 		global $db;
 		$this->db = $db;
 		
@@ -71,6 +72,9 @@ class Item {
 		}
 		if(isset($attributes['done'])){
 			$this->set_done($attributes['done']);
+		}
+		if(isset($attributes['date'])){
+			$this->set_date($attributes['date']);
 		}
 	}
 	
@@ -105,7 +109,14 @@ class Item {
 	public function set_done($done) {
 		$this->done = (bool) $done;
 	}
+	
+	public function get_date() {
+		return $this->date;
+	}
 
+	public function set_date($date) {
+		$this->date = $date;
+	}
 		
 	public function save(){
 		// get user from db
@@ -126,6 +137,17 @@ class Item {
 		
 		return $result;
 	}
+	
+	public function remove(){
+		if ($this->get_id() &&
+			$result = $this->db->select(self::table, "id = " . $this->get_id()))
+		{
+			$result = $this->db->delete(
+				self::table,
+				'id = ' . $this->get_id()
+			);
+		}
+	}
 
 
 	public function to_array(){
@@ -134,6 +156,7 @@ class Item {
 			'label' => $this->get_label(),
 			'tag' => $this->get_tag(),
 			'done' => $this->get_done(),
+			'date' => $this->get_date(),
 		);
 	}
 	

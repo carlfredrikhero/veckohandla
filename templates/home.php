@@ -4,8 +4,8 @@
 	</div>
 	<div class="content">
 		<div class="period">
-			<input type="hidden" id="week" />
-			<a href="#" class="select-week">Select start date</a> <small>(the period will consist of your start date +7 days)</small>
+			<input type="hidden" id="date" value="<?php echo $date; ?>" />
+			<a href="#" class="select-date"><?php echo $human_date; ?></a> <small>(Click to change)</small>
 		</div>
 		<ul id="shopping-list">
 			<li>
@@ -17,7 +17,10 @@
 </div>
 	
 <script type="text/template" id="item-template">
-<input class="item-done" type="checkbox" <%= done ? 'checked="checked"' : '' %> /> <input class="item-label" type="text" value="<%= label %>" placeholder="Lägg till vara..."/> <input class="item-tag" type="text" value="<%= tag %>" placeholder="Lägg till en kategori"/>
+<input class="item-done" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+<input class="item-label" type="text" value="<%= label %>" placeholder="Lägg till vara..."/>
+<input class="item-tag" type="text" value="<%= tag %>" placeholder="Lägg till en kategori"/>
+<a class="item-remove" href="#">&times;</a> 
 </script>
 
 <script type="text/template" id="tag-header-template">

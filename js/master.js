@@ -1,4 +1,14 @@
 $(function(){
+	// TODO http://stackoverflow.com/questions/2385332/jquery-datepicker-highlight-dates
+	// highlight dates with shopping list
+	$('#date').datepicker({
+		dateFormat: 'yy-mm-dd'
+	});
+	
+	$('.select-date').click(function(){
+		$('#date').datepicker('show');
+	});
+	
 	var ItemModel = Backbone.Model.extend({
 		defaults: {
 			"label":  "",
@@ -30,6 +40,7 @@ $(function(){
 		template: _.template($('#item-template').html()),
 		initalize: function(){
 			this.listenTo(this.model, 'change', this.render);
+			this.listenTo(this.model, 'destroy', this.remove);
 		},
 		render: function(){
 			this.$el.html(this.template(this.model.toJSON()));
@@ -39,7 +50,8 @@ $(function(){
 		events: {
 			"click input[type=\"checkbox\"]": "toggle",
 			"blur input[type=\"text\"]": "save",
-			"keypress input[type=\"text\"]": "saveOnEnter"
+			"keypress input[type=\"text\"]": "saveOnEnter",
+			"click .item-remove": "destroy"
 		},
 		toggle: function(e){
 			this.model.toggle();
@@ -65,14 +77,24 @@ $(function(){
 			if (e.keyCode != 13) return;
 			console.log('saveOnEnter');
 			this.$el.find('input:focus').trigger('blur');
+		},
+		destroy: function(){
+			this.model.destroy();
+		},
+		remove: function(){
+			this.$el.fadeOut(300, function(){
+				$(this).remove();
+			});
 		}
 	});
 	
 	var AppView = Backbone.View.extend({
 		el: $('#shoplistapp'),
+		dp: $('#date'),
 		events: {
 			"keypress #add": "createOnEnter",
-			"blur .tag-header input": "bulkUpdateTag"
+			"blur .tag-header input": "bulkUpdateTag",
+			"change #date": "setDate"
 		},
 		initialize: function(){
 			this.input = this.$('#add');
@@ -81,7 +103,7 @@ $(function(){
 			this.listenTo(Items, 'all', this.render);
 			this.listenTo(Items, 'sort', this.sort);
 			
-			Items.fetch();
+			Items.fetch({data: {date: this.dp.val()}});
 		},
 		createOnEnter: function(e){
 			if (e.keyCode != 13 || this.input.val() == '') return;
@@ -108,10 +130,10 @@ $(function(){
 			this.$("#shopping-list").append(view.render().el);
 		},
 		addAll: function(){
+			this.$("#shopping-list li:gt(0)").remove();
 			Items.each(this.addOne);
 		},
 		sort: function(){
-			this.$("#shopping-list li:gt(0)").remove();
 			this.addAll();
 		},
 		bulkUpdateTag: function(ev){
@@ -121,13 +143,19 @@ $(function(){
 				return item.get('tag') == orgValue;
 			}));
 			
-			
-			console.log($tagInput.val());
-			var i = 1;
-			
 			ItemsToUpdate.each(function(item){
 				item.save({'tag': $tagInput.val()});
 			});
+		},
+		setDate: function(ev){
+			var dateObject = $("#date").datepicker("getDate");
+			var dateString = $.datepicker.formatDate("d M, yy", dateObject);
+			
+			$('.select-date').text(dateString);
+			
+			Items.fetch({data: {date: $('#date').val()}});
+			
+			
 		}
 	});
 	

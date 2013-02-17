@@ -20,11 +20,19 @@ $app->add(new \Slim\Middleware\SessionCookie(array(
 $app->add(new \Slim\Middleware\ContentTypes());
 
 $app->get('/', function() use ($app){
-	$app->render('home.php');
+	
+	// get latest date
+	$date = date('Y-m-d');
+	$human_date = date('j M, Y');
+	$app->render('home.php', array(
+		'date' => $date,
+		'human_date' => $human_date,
+	));
 });
 
 $app->get('/items', function() use ($app){
 	$items = new Items();
+	$date = $app->request()->get('date');
 	$items->fetch();
 
 	$response = $app->response();
@@ -47,7 +55,7 @@ $app->post('/items', function() use ($app){
 		$response->body(json_encode($data));
 	} else {
 		$response->status(500);
-		$response->body(json_encode('Artikeln kunde inte sparas'));
+		$response->body(json_encode($result));
 	}
 });
 
@@ -74,6 +82,25 @@ $app->put('/items/:id', function($id) use ($app){
 		$response->status(500);
 		$response->body(json_encode('Artikeln kunde inte sparas'));
 	}
+});
+
+$app->delete('/items/:id', function($id) use ($app){
+	$response = $app->response();
+    $response['Content-Type'] = 'application/json';
+	
+	$id = (int) $id;
+	if (!$id){
+		$response->status(500);
+		$response->body(json_encode('Artikeln kunde inte tas bort 1'));
+	}
+
+	$item = new Item();
+	$item->set_id($id);
+	
+	$item->remove();
+
+	$response->status(204);
+	$response->body();
 });
 
 $app->run();
