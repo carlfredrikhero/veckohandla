@@ -1,0 +1,131 @@
+body{
+	font-family: 'Open Sans';
+	font-weight: 400;
+	font-size:13px;
+	line-height:24px;
+}
+
+:focus{
+	outline:none;
+}
+
+ul, li{
+	list-style: none;
+	margin:0;
+	padding:0;
+}
+
+li{
+	margin-left: 10px;
+	padding:5px;
+}
+
+input[type="checkbox"]{
+	margin: 5px 10px 5px 5px;
+}
+
+input[type="text"]{
+	margin:0;
+	padding:0;
+}
+
+.muted{
+	color:#999;
+}
+
+.collapsed{
+	display: none;
+}
+
+.container{
+	width:800px;
+	margin: 0 auto;
+}
+
+.sidebar, .content{
+	float:left;
+}
+
+.sidebar{
+	width:300px;
+}
+
+.content{
+	width:480px;
+	margin-left:20px;
+}
+
+.period{
+	padding:5px 10px;
+}
+
+.content li{
+	overflow: hidden;
+	border-top:1px solid #ccc;
+	border-right:1px solid #ccc;
+	border-bottom:0;
+	border-left:1px solid #ccc;
+	position: relative;
+}
+
+.content li:last-child{
+	border-bottom:1px solid #ccc;
+}
+
+.content li.done *{
+	opacity: 0.4;
+}
+
+.tag-header{
+	padding:0px 5px;
+	background:#ccc;
+	line-height:20px;
+
+}
+
+.tag-header input[type="text"]{
+	text-transform: uppercase;
+	font-weight: 600;
+	font-size: 10px;
+	background:transparent;
+	border:0;
+	padding: 5px 0;
+	display: inline-block;
+	width:100%;
+	box-sizing: border-box;
+}
+
+#shopping-list input.item-done{
+	float: left;
+}
+
+input[type="text"].item-label, input[type="text"].item-tag{
+	display: inline-block;
+	position:absolute;
+	top:5px;
+	border:0;
+	padding: 5px 0;
+}
+
+input[type="text"].item-label{
+	left:35px;
+	right:27px;
+}
+
+input[type="text"].item-tag{
+	right:5px;
+	left:auto;
+	width:0;
+	background-image:url(../img/tag.png);
+	background-position: 5px center;
+	background-repeat: no-repeat;
+	background-size: 12px;
+	padding-left: 22px;
+}
+
+input[type="text"].item-tag:focus{
+	width:auto;
+	left:35px;
+}
+
+

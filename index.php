@@ -1,5 +1,7 @@
 <?php
+
 require 'vendor/autoload.php';
+require 'config.php';
 
 $app = new \Slim\Slim(array(
 	'log.enabled' => true,
@@ -13,7 +15,24 @@ $app->add(new \Slim\Middleware\SessionCookie(array(
 $app->add(new \Slim\Middleware\ContentTypes());
 
 $app->get('/', function() use ($app){
-	echo 'Hello Slim World!';
+	$app->render('home.php');
+});
+
+$app->get('/items', function() use ($app){
+	//$items = Item::find_all();
+	$items = array(
+		array(
+			'label' => 'Mjölk',
+			'done' => false,
+			'tag' => 'Mejerier',
+			'id' => 1,
+		),
+	);
+
+	$response = $app->response();
+    $response['Content-Type'] = 'application/json';
+    $response->status(200);
+    $response->body(json_encode($items));
 });
 
 $app->run();
