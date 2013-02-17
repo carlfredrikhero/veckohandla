@@ -16,7 +16,6 @@ ul, li{
 }
 
 li{
-	margin-left: 10px;
 	padding:5px;
 }
 
@@ -38,21 +37,22 @@ input[type="text"]{
 }
 
 .container{
-	width:800px;
+	width:480px;
+	max-width: 100%;
 	margin: 0 auto;
 }
 
 .sidebar, .content{
+	width: 100%;
 	float:left;
 }
 
 .sidebar{
+	display:none;
 	width:300px;
 }
 
 .content{
-	width:480px;
-	margin-left:20px;
 }
 
 .period{
