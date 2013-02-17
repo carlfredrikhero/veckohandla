@@ -126,21 +126,7 @@ $(function(){
 			var i = 1;
 			
 			ItemsToUpdate.each(function(item){
-				window.setTimeout(function(){
-					item.save({'tag': $tagInput.val()}, {
-					error: function(model, xhr, options){
-						console.error(model);
-						//console.error(xhr);
-						//console.error(options);
-					},
-					success: function(model, response, options){
-						console.log(model);
-						console.log(response);
-						console.log(options);
-					}
-				});
-				},i * 1000);
-				i++;
+				item.save({'tag': $tagInput.val()});
 			});
 		}
 	});

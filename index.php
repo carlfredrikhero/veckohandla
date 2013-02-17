@@ -2,6 +2,11 @@
 
 require 'vendor/autoload.php';
 require 'config.php';
+require 'lib/mysql/class.db.php';
+
+require 'models/items.php';
+
+$db = new db("mysql:host=" . DB1_HOST . ";port=" . DB1_PORT . ";dbname=" . DB1_NAME . ';charset=UTF8', DB1_USER, DB1_PASS);
 
 $app = new \Slim\Slim(array(
 	'log.enabled' => true,
@@ -19,26 +24,56 @@ $app->get('/', function() use ($app){
 });
 
 $app->get('/items', function() use ($app){
-	//$items = Item::find_all();
-	$items = array(
-		array(
-			'label' => 'Mjölk',
-			'done' => false,
-			'tag' => 'Mejerier',
-			'id' => 1,
-		),
-	);
+	$items = new Items();
+	$items->fetch();
 
 	$response = $app->response();
     $response['Content-Type'] = 'application/json';
     $response->status(200);
-    $response->body(json_encode($items));
+    $response->body($items->to_json());
 });
 
-$app->get('/server', function() use ($app){
-	echo '<pre>';
-		var_dump($_SERVER);
-	echo '</pre>';
+$app->post('/items', function() use ($app){
+	$data = $app->request()->getBody();
+
+	$item = new Item($data);
+	$result = $item->save();
+	
+	$response = $app->response();
+    $response['Content-Type'] = 'application/json';
+	
+	if ($result){
+		$response->status(200);
+		$response->body(json_encode($data));
+	} else {
+		$response->status(500);
+		$response->body(json_encode('Artikeln kunde inte sparas'));
+	}
+});
+
+$app->put('/items/:id', function($id) use ($app){
+	$response = $app->response();
+    $response['Content-Type'] = 'application/json';
+	
+	$id = (int) $id;
+	if (!$id){
+		$response->status(500);
+		$response->body(json_encode('Artikeln kunde inte sparas'));
+	}
+	
+	$data = $app->request()->getBody();
+
+	$item = new Item($data);
+	$item->set_id($id);
+	$result = $item->save();
+	
+	if ($result){
+		$response->status(200);
+		$response->body(json_encode($data));
+	} else {
+		$response->status(500);
+		$response->body(json_encode('Artikeln kunde inte sparas'));
+	}
 });
 
 $app->run();
