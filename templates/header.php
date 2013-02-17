@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Veckohandla, inköpslista</title>
 	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0;" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="<?php echo ROOT; ?>/js/underscore-1.4.3.js"></script>

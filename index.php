@@ -35,4 +35,10 @@ $app->get('/items', function() use ($app){
     $response->body(json_encode($items));
 });
 
+$app->get('/server', function() use ($app){
+	echo '<pre>';
+		var_dump($_SERVER);
+	echo '</pre>';
+});
+
 $app->run();
