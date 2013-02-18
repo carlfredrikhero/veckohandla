@@ -15,9 +15,19 @@ class Items extends ArrayObject {
 		parent::__construct($array);
 	}
 	
-	public function fetch(){
+	public function fetch($where){
 		global $db;
-		$result = $db->select(self::table);
+		$where_string = array();
+		
+		foreach($where AS $key => $value){
+			$where_string[] = $key . ' = :' . $key;
+		}
+		
+		$result = $db->select(
+			self::table,
+			implode(' AND ', $where_string),
+			$where
+		);
 		
 		if ($result){
 			foreach($result AS $row){
@@ -121,18 +131,25 @@ class Item {
 	public function save(){
 		// get user from db
 		if ($this->get_id() &&
-			$result = $this->db->select(self::table, "id = " . $this->get_id()))
+			$result = $this->db->select(self::table, "id = :id", array('id' => $this->get_id())))
 		{
 			$result = $this->db->update(
 				self::table,
 				$this->to_array(),
-				'id = ' . $this->get_id()
+				"id = :id", 
+				array('id' => $this->get_id())
 			);
 		} else {
 			$result = $this->db->insert(
 				self::table,
 				$this->to_array()
 			);
+			
+			if ($result){
+				$this->set_id(
+					$this->db->lastInsertId('id')
+				);
+			}
 		}
 		
 		return $result;
@@ -140,7 +157,7 @@ class Item {
 	
 	public function remove(){
 		if ($this->get_id() &&
-			$result = $this->db->select(self::table, "id = " . $this->get_id()))
+			$result = $this->db->select(self::table, "id = :id", array('id' => $this->get_id())))
 		{
 			$result = $this->db->delete(
 				self::table,
@@ -151,13 +168,21 @@ class Item {
 
 
 	public function to_array(){
-		return array(
+		$array = array(
 			'id' => $this->get_id(),
 			'label' => $this->get_label(),
 			'tag' => $this->get_tag(),
 			'done' => $this->get_done(),
 			'date' => $this->get_date(),
 		);
+		
+		foreach($array AS $key=>$value){
+			if (is_null($value)){
+				unset($array[$key]);
+			}
+		}
+		
+		return $array;
 	}
 	
 	public function to_json(){

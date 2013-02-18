@@ -13,7 +13,8 @@ $(function(){
 		defaults: {
 			"label":  "",
 			"tag":    "Okategoriserade",
-			"done":   false
+			"done":   false,
+			"date": $('#date').val()
 		},
 		toggle: function(){
 			this.save({'done': !this.get('done')});
@@ -62,7 +63,6 @@ $(function(){
 			var tag_val = this.$el.find('.item-tag').val();
 			if (this.model.get('label') != label_val ||
 				this.model.get('tag') != tag_val){
-				console.log('save model');
 				this.model.set({
 					label: label_val,
 					tag: tag_val
@@ -79,11 +79,14 @@ $(function(){
 			this.$el.find('input:focus').trigger('blur');
 		},
 		destroy: function(){
+			console.log('destroy');
 			this.model.destroy();
-		},
-		remove: function(){
+			console.log('remove item view');
+			
+			var that = this;
 			this.$el.fadeOut(300, function(){
-				$(this).remove();
+				that.remove();
+				Items.sort();
 			});
 		}
 	});
@@ -101,7 +104,7 @@ $(function(){
 			this.listenTo(Items, 'add', this.addOne);
 			this.listenTo(Items, 'reset', this.addAll);
 			this.listenTo(Items, 'all', this.render);
-			this.listenTo(Items, 'sort', this.sort);
+			this.listenTo(Items, 'sort', this.addAll);
 			
 			Items.fetch({data: {date: this.dp.val()}});
 		},
@@ -133,9 +136,6 @@ $(function(){
 			this.$("#shopping-list li:gt(0)").remove();
 			Items.each(this.addOne);
 		},
-		sort: function(){
-			this.addAll();
-		},
 		bulkUpdateTag: function(ev){
 			var $tagInput = $(ev.currentTarget);
 			var orgValue = $tagInput.data('org-value');
@@ -143,8 +143,14 @@ $(function(){
 				return item.get('tag') == orgValue;
 			}));
 			
-			ItemsToUpdate.each(function(item){
+			
+			
+			ItemsToUpdate.each(function(item, iterator){
 				item.save({'tag': $tagInput.val()});
+				
+				if ((ItemsToUpdate._wrapped.length - 1) == iterator){
+					Items.sort();
+				}
 			});
 		},
 		setDate: function(ev){
