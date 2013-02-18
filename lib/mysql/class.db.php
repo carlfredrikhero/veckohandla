@@ -59,7 +59,7 @@ class db extends PDO {
 
 	public function delete($table, $where, $bind="") {
 		$sql = "DELETE FROM " . $table . " WHERE " . $where . ";";
-		$this->run($sql, $bind);
+		return $this->run($sql, $bind);
 	}
 
 	private function filter($table, $info) {

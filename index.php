@@ -103,4 +103,21 @@ $app->delete('/items/:id', function($id) use ($app){
 	$response->body();
 });
 
+$app->get('/test', function() use ($app){
+	global $db;
+	
+	/*$insert = $db->insert('items', array(
+		'label' => 'Testlabel',
+		'tag' => 'Testtag',
+		'done' => true,
+		'date' => date('Y-m-d'),
+	));
+	
+	var_dump($insert);*/
+	
+	$delete = $db->delete('items', 'id = 4');
+	
+	var_dump($delete);
+});
+
 $app->run();
