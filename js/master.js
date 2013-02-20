@@ -166,4 +166,12 @@ $(function(){
 	});
 	
 	var App = new AppView;
+	
+	$(document).bind('FBSDKLoaded', function() {
+        var User = new FacebookUser();
+	
+		$('.facebook-login').click(function(){
+			User.login();
+		});
+    });
 });

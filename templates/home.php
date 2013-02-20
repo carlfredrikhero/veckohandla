@@ -1,4 +1,7 @@
 <?php require 'header.php'; ?>
+<div id="user-state">
+	<a href="#" class="facebook-login">Logga in</a>
+</div>
 <div class="container" id="shoplistapp">
 	<div class="sidebar">
 	</div>
