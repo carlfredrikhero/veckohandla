@@ -39,6 +39,8 @@
 
     logout: function(){
       FB.logout();
+	  this._loginStatus = 'facebook:disconnected';
+	  this.clear();
     },
 
     updateLoginStatus: function(){

@@ -105,8 +105,6 @@ $(function(){
 			this.listenTo(Items, 'reset', this.addAll);
 			this.listenTo(Items, 'all', this.render);
 			this.listenTo(Items, 'sort', this.addAll);
-			
-			Items.fetch({data: {date: this.dp.val()}});
 		},
 		createOnEnter: function(e){
 			if (e.keyCode != 13 || this.input.val() == '') return;
@@ -170,8 +168,36 @@ $(function(){
 	$(document).bind('FBSDKLoaded', function() {
         var User = new FacebookUser();
 	
-		$('.facebook-login').click(function(){
+		$('.content').on('click', '.fb-login', function(){
 			User.login();
 		});
+		$('.content').on('click', '.fb-logout', function(){
+			User.logout();
+		});
+		
+		User.on('change', function(model, response){
+			$('.content').find('.facebook').remove();
+			if (User.isConnected()){
+				Items.fetch({
+					data: {
+						date: $('#date').val(),
+						user: User.get('id')
+					}
+				});
+
+				$('.content').append(
+					_.template(
+						$('#fb-logout-template').html(),
+						{name: User.get('name')}
+					)
+				);
+			} else {
+				$('.content').prepend(
+					_.template($('#fb-login-template').html())
+				);
+			}
+		});
+		
+		User.updateLoginStatus();
     });
 });

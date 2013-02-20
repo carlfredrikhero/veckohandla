@@ -23,6 +23,7 @@
     FB.init({
       appId      : '<?php echo FB_APP_ID; ?>', // App ID from the App Dashboard
       channelUrl : '<?php echo ROOT; ?>/channel.html', // Channel File for x-domain communication
+	  status     : false, // check the login status upon init?
       cookie     : true, // set sessions cookies to allow your server to access the session?
       xfbml      : false  // parse XFBML tags on this page?
     });

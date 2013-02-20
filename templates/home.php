@@ -1,7 +1,4 @@
 <?php require 'header.php'; ?>
-<div id="user-state">
-	<a href="#" class="facebook-login">Logga in</a>
-</div>
 <div class="container" id="shoplistapp">
 	<div class="sidebar">
 	</div>
@@ -28,5 +25,17 @@
 
 <script type="text/template" id="tag-header-template">
 	<li class="tag-header"><input type="text" value="<%= headertext %>" data-org-value="<%= headertext %>" /></li>
+</script>
+
+<script type="text/template" id="fb-login-template">
+	<div class="facebook">
+		<a href="#" class="fb-login btn">Logga in med Facebook</a>
+	</div>
+</script>
+
+<script type="text/template" id="fb-logout-template">
+	<div class="facebook">
+		Inloggad som <%= name %> via Facebook. <a href="#" class="fb-logout">Logga ut</a>
+	</div>
 </script>
 <?php require 'footer.php'; ?>
