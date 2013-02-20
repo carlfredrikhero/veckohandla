@@ -7,6 +7,7 @@
 			<input type="hidden" id="date" value="<?php echo $date; ?>" />
 			<a href="#" class="select-date"><?php echo $human_date; ?></a> <small>(Click to change)</small>
 		</div>
+		<div id="loading">Loading...</div>
 		<ul id="shopping-list">
 			<li>
 				<input type="checkbox" disabled="disabled" /> 

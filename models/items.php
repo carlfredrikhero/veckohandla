@@ -65,8 +65,8 @@ class Item {
 	protected $tag;
 	protected $done;
 	protected $date; // YYYY-MM-DD
-	
-	
+	protected $user_id; // facebook user id
+
 	public function __construct($attributes = array()) {
 		global $db;
 		$this->db = $db;
@@ -85,6 +85,9 @@ class Item {
 		}
 		if(isset($attributes['date'])){
 			$this->set_date($attributes['date']);
+		}
+		if(isset($attributes['user_id'])){
+			$this->set_user_id($attributes['user_id']);
 		}
 	}
 	
@@ -126,6 +129,14 @@ class Item {
 
 	public function set_date($date) {
 		$this->date = $date;
+	}
+	
+	public function get_user_id() {
+		return $this->user_id;
+	}
+
+	public function set_user_id($user_id) {
+		$this->user_id = (int) $user_id;
 	}
 		
 	public function save(){
@@ -174,6 +185,7 @@ class Item {
 			'tag' => $this->get_tag(),
 			'done' => $this->get_done(),
 			'date' => $this->get_date(),
+			'user_id' => $this->get_user_id(),
 		);
 		
 		foreach($array AS $key=>$value){

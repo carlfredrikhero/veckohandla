@@ -1,0 +1,6 @@
+web1:
+  php_extensions:
+    - pdo_mysql
+
+db1:
+  type: mysql

@@ -33,8 +33,10 @@ $app->get('/', function() use ($app){
 $app->get('/items', function() use ($app){
 	$items = new Items();
 	$date = $app->request()->get('date');
+	$user_id = (int) $app->request()->get('user_id');
 	$items->fetch(array(
 		'date' => $date,
+		'user_id' => $user_id,
 	));
 
 	$response = $app->response();
@@ -101,8 +103,8 @@ $app->delete('/items/:id', function($id) use ($app){
 	
 	$item->remove();
 
-	$response->status(204);
-	$response->body();
+	$response->status(200);
+	$response->body(json_encode(array('id' => $id)));
 });
 
 $app->run();
